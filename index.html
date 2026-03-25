@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk Self Assessment — NP&F+ Global Lending</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --purple: #820AD1;
+  --purple-dark: #5a0891;
+  --purple-light: #f3e8fc;
+  --purple-mid: #d4a8f0;
+  --gray-50: #f9f9f8;
+  --gray-100: #f0efeb;
+  --gray-200: #e0dfd9;
+  --gray-400: #a0a09a;
+  --gray-600: #5c5c58;
+  --gray-800: #2a2a28;
+  --orange: #d95c00;
+  --orange-light: #fff3e8;
+  --green: #1a6e3c;
+  --green-light: #e8f5ee;
+  --red: #b32727;
+  --red-light: #fdecea;
+  --amber: #7a4800;
+  --amber-light: #fef3dc;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.07), 0 4px 12px rgba(0,0,0,.05);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--gray-800);
+  background: var(--gray-100);
+  min-height: 100vh;
+}
+.shell {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+.header {
+  background: var(--purple);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  padding: 1.75rem 2rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.header-title { font-size: 20px; font-weight: 500; color: #fff; letter-spacing: -.3px; }
+.header-sub { font-size: 12px; color: var(--purple-mid); margin-top: 4px; }
+.pdf-btn {
+  flex-shrink: 0;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.25);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background .15s;
+}
+.pdf-btn:hover { background: rgba(255,255,255,.25); }
+.pdf-icon { width: 16px; height: 16px; }
+
+/* ── Steps nav ──────────────────────────────────────── */
+.steps-nav {
+  background: #fff;
+  display: flex;
+  border-bottom: 1px solid var(--gray-200);
+  overflow-x: auto;
+}
+.step-tab {
+  flex: 1;
+  min-width: 90px;
+  padding: 11px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  text-align: center;
+  cursor: pointer;
+  color: var(--gray-400);
+  border-bottom: 2px solid transparent;
+  transition: all .15s;
+  white-space: nowrap;
+  user-select: none;
+}
+.step-tab.active { color: var(--purple); border-bottom-color: var(--purple); }
+.step-tab.done { color: var(--gray-600); }
+.step-tab.done::before { content: "✓ "; color: var(--green); }
+
+/* ── Main card ──────────────────────────────────────── */
+.card {
+  background: #fff;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow);
+}
+.section { display: none; }
+.section.active { display: block; }
+
+.sec-title { font-size: 17px; font-weight: 500; letter-spacing: -.2px; margin-bottom: 4px; }
+.sec-sub { font-size: 12px; color: var(--gray-400); margin-bottom: 1.5rem; line-height: 1.5; }
+
+/* ── Callout ────────────────────────────────────────── */
+.callout {
+  border-left: 3px solid var(--purple);
+  background: var(--purple-light);
+  padding: .65rem 1rem;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 1.25rem;
+  font-size: 12px;
+  color: var(--gray-600);
+  line-height: 1.6;
+}
+.callout.warn { border-left-color: var(--orange); background: var(--orange-light); }
+
+/* ── Form fields ────────────────────────────────────── */
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.field { margin-bottom: 14px; }
+.field-last { margin-bottom: 0; }
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-600);
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+}
+label .hint {
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--gray-400);
+  font-size: 11px;
+  margin-left: 4px;
+}
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--gray-800);
+  background: #fff;
+  transition: border .15s;
+  appearance: none;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23a0a09a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 28px;
+  cursor: pointer;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 0 3px rgba(130,10,209,.08);
+}
+textarea { resize: vertical; min-height: 68px; line-height: 1.5; }
+.field-error {
+  border-color: var(--red) !important;
+  box-shadow: 0 0 0 3px rgba(179,39,39,.1) !important;
+}
+.country-lock {
+  font-weight: 400;
+  font-size: 10px;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--purple);
+  background: var(--purple-light);
+  padding: 1px 7px;
+  border-radius: 10px;
+  margin-left: 6px;
+}
+
+/* ── Typeahead ───────────────────────────────────────────────────────────── */
+.typeahead-wrap { position: relative; }
+.typeahead-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  list-style: none;
+  margin: 0; padding: 4px 0;
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.08);
+}
+.typeahead-list.open { display: block; }
+.typeahead-list li {
+  padding: 7px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  transition: background .1s;
+}
+.typeahead-list li:hover, .typeahead-list li.active { background: var(--purple-light); }
+.ta-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--purple);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.ta-name { font-weight: 500; color: var(--gray-800); }
+.ta-meta { font-size: 11px; color: var(--gray-400); }
+
+/* ── Buttons ────────────────────────────────────────── */
+.btn {
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--gray-200);
+  background: #fff;
+  color: var(--gray-800);
+}
+.btn:hover { background: var(--gray-50); }
+.btn-primary { background: var(--purple); color: #fff; border-color: var(--purple); }
+.btn-primary:hover { background: var(--purple-dark); border-color: var(--purple-dark); }
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+.btn-danger { color: var(--red); border-color: #fca5a5; font-size: 12px; padding: 4px 10px; }
+.btn-danger:hover { background: var(--red-light); }
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gray-100);
+}
+
+/* ── Risk cards ─────────────────────────────────────── */
+.risk-card {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-bottom: .75rem;
+  background: var(--gray-50);
+  transition: border .15s;
+}
+.risk-card:hover { border-color: var(--purple-mid); }
+.risk-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.risk-num {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-400);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.auto-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: .85rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--gray-200);
+}
+.auto-label { font-size: 11px; color: var(--gray-400); }
+.auto-val { font-size: 11px; font-weight: 500; }
+
+/* ── Badges ─────────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  font-family: 'DM Mono', monospace;
+}
+.b-low { background: var(--green-light); color: var(--green); }
+.b-med { background: var(--amber-light); color: var(--amber); }
+.b-high { background: var(--red-light); color: var(--red); }
+.b-crit { background: #fee2e2; color: #7f1d1d; }
+.b-na { background: var(--gray-100); color: var(--gray-400); }
+
+/* ── Squad header ───────────────────────────────────── */
+.squad-head {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--purple-dark);
+  background: var(--purple-light);
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  margin: 1.25rem 0 .6rem;
+}
+.concern-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+  margin-bottom: 8px;
+  align-items: start;
+}
+.concern-label { font-size: 12px; font-weight: 500; padding: 8px 0 2px; }
+.concern-why { font-size: 11px; color: var(--gray-400); line-height: 1.5; }
+
+/* ── Inline control section ─────────────────────────────────────────────── */
+.ctrl-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1.5px dashed var(--purple-mid);
+}
+.ctrl-section-title {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--purple);
+  margin-bottom: .75rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.ctrl-section-title::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--purple);
+}
+
+/* ── Summary ────────────────────────────────────────── */
+.stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+.stat-card {
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: .85rem 1rem;
+}
+.stat-lbl { font-size: 11px; color: var(--gray-400); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .4px; }
+.stat-val { font-size: 22px; font-weight: 500; }
+.summary-title { font-size: 13px; font-weight: 500; margin: 1.25rem 0 .5rem; color: var(--gray-600); text-transform: uppercase; letter-spacing: .5px; }
+.summary-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.summary-table th { text-align: left; padding: 7px 10px; background: var(--gray-100); font-weight: 500; font-size: 11px; color: var(--gray-600); border-bottom: 1px solid var(--gray-200); text-transform: uppercase; letter-spacing: .4px; }
+.summary-table td { padding: 7px 10px; border-bottom: 1px solid var(--gray-100); vertical-align: top; }
+.summary-table tr:last-child td { border-bottom: none; }
+.muted { color: var(--gray-400); font-style: italic; }
+
+/* ── Divider ────────────────────────────────────────── */
+.divider { height: 1px; background: var(--gray-100); margin: 1.5rem 0; }
+
+/* ═══════════════════════════════════════════════════════
+   PRINT STYLES
+═══════════════════════════════════════════════════════ */
+@media print {
+  @page {
+    size: A4;
+    margin: 18mm 15mm 18mm 15mm;
+  }
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { background: #fff !important; font-size: 11px; }
+  .shell { max-width: 100%; padding: 0; margin: 0; }
+  .header { border-radius: 0; padding: 12px 16px; }
+  .header-title { font-size: 15px; }
+  .pdf-btn, .steps-nav, .nav-row, .btn { display: none !important; }
+  .card { border-radius: 0; padding: 16px; box-shadow: none; }
+  .section { display: block !important; }
+  .section:not(:last-child) { page-break-after: always; }
+  .print-section-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--purple);
+    border-bottom: 2px solid var(--purple-light);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .risk-card { background: var(--gray-50) !important; page-break-inside: avoid; }
+  .squad-head { background: var(--purple-light) !important; }
+  .b-low { background: var(--green-light) !important; }
+  .b-med { background: var(--amber-light) !important; }
+  .b-high { background: var(--red-light) !important; }
+  .b-crit { background: #fee2e2 !important; }
+  .callout { background: var(--purple-light) !important; }
+  .callout.warn { background: var(--orange-light) !important; }
+  input, select, textarea {
+    border: 1px solid var(--gray-200) !important;
+    box-shadow: none !important;
+  }
+  .row2 { grid-template-columns: 1fr 1fr; }
+  .row3 { grid-template-columns: 1fr 1fr 1fr; }
+  .concern-row { grid-template-columns: 180px 1fr; }
+  .stats { grid-template-columns: repeat(3,1fr); }
+  .print-field-val {
+    display: block;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 6px 10px;
+    min-height: 28px;
+    font-size: 12px;
+    background: #fff;
+  }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="header-title">Risk Self Assessment — NP&amp;F+</div>
+      <div class="header-sub">Global Lending &nbsp;·&nbsp; Complete all sections, then export to PDF for Projac</div>
+    </div>
+    <button class="pdf-btn" onclick="exportPDF()">
+      <svg class="pdf-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M4 12h8M8 3v7M5 7l3 3 3-3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="1" y="1" width="14" height="14" rx="2" stroke-opacity=".4"/>
+      </svg>
+      Export PDF
+    </button>
+  </div>
+
+  <!-- STEP TABS -->
+  <div class="steps-nav" id="steps-nav">
+    <div class="step-tab active" onclick="goTo(0)">Identification</div>
+    <div class="step-tab" onclick="goTo(1)">Risk statement</div>
+    <div class="step-tab" onclick="goTo(2)">Risks &amp; controls</div>
+    <div class="step-tab" onclick="goTo(3)">Defense</div>
+    <div class="step-tab" onclick="goTo(4)">Summary</div>
+  </div>
+
+  <!-- MAIN CARD -->
+  <div class="card">
+
+    <!-- ── SECTION 0: Identification ── -->
+    <div class="section active" id="s0">
+      <span class="print-section-title">Section 1 — RFC Identification</span>
+      <div class="sec-title">RFC identification</div>
+      <div class="sec-sub">Basic information about this product or feature</div>
+
+      <div class="row2">
+        <div class="field">
+          <label>RFC / Product name</label>
+          <input type="text" id="f-rfc" placeholder="e.g. RFC-123 — Open Finance Sweeping">
+        </div>
+        <div class="field">
+          <label>Product Manager</label>
+          <div class="typeahead-wrap">
+            <input type="text" id="f-pm" placeholder="Type a name or @handle..." autocomplete="off" oninput="typeahead(document.getElementById('f-pm'),'f-pm-list')" onblur="closeTypeahead('f-pm-list',300)">
+            <ul class="typeahead-list" id="f-pm-list"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label>Author(s) <span class="hint">— separate multiple with comma</span></label>
+          <div class="typeahead-wrap">
+            <input type="text" id="f-authors" placeholder="Type a name or @handle..." autocomplete="off" oninput="typeahead(document.getElementById('f-authors'),'f-authors-list')" onblur="closeTypeahead('f-authors-list',300)">
+            <ul class="typeahead-list" id="f-authors-list"></ul>
+          </div>
+        </div>
+        <div class="field">
+          <label>BCO reviewers <span class="hint">— separate multiple with comma</span></label>
+          <div class="typeahead-wrap">
+            <input type="text" id="f-bco" placeholder="Type a name or @handle..." autocomplete="off" oninput="typeahead(document.getElementById('f-bco'),'f-bco-list')" onblur="closeTypeahead('f-bco-list',300)">
+            <ul class="typeahead-list" id="f-bco-list"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="row3">
+        <div class="field">
+          <label>Country / Countries</label>
+          <select id="f-country">
+            <option value="">Select...</option>
+            <option>BR</option><option>MX</option><option>COL</option>
+            <option>BR + MX</option><option>BR + COL</option><option>All</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Document status</label>
+          <select id="f-status">
+            <option>Early Draft</option><option>Final Draft</option><option>Approved</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Date</label>
+          <input type="text" id="f-date" placeholder="MM/DD/YYYY">
+        </div>
+      </div>
+      <div class="field field-last">
+        <label>Product summary <span class="hint">— up to 3 sentences</span></label>
+        <textarea id="f-abstract" placeholder="What problem does this product solve? How does it work? What is the expected outcome for the customer?"></textarea>
+      </div>
+
+      <div class="nav-row">
+        <span></span>
+        <button class="btn btn-primary" onclick="goToValidated(1)">Next: Risk statement →</button>
+      </div>
+    </div>
+
+    <!-- ── SECTION 1: Risk statement ── -->
+    <div class="section" id="s1">
+      <span class="print-section-title">Section 2 — Initial Risk Statement</span>
+      <div class="sec-title">Initial risk statement</div>
+      <div class="sec-sub">Think about risks before filling the matrix. Answer freely — no risk expertise required.</div>
+
+      <div class="callout">Answer the 3 questions below. The more context you give here, the faster the Defense teams can do their analysis.</div>
+
+      <div class="field">
+        <label>What could go wrong?</label>
+        <textarea id="f-stmt" style="min-height:90px" placeholder="e.g. Data leaks, customer loses money, product outage, regulatory change, new fraud vector…"></textarea>
+      </div>
+      <div class="field">
+        <label>Known mitigators</label>
+        <textarea id="f-mitig" placeholder="What is already in place today to reduce these risks?"></textarea>
+      </div>
+      <div class="field field-last">
+        <label>Regulatory grey areas or doubts</label>
+        <textarea id="f-regdoubts" placeholder="Is there anything legally or regulatorily uncertain about this product?"></textarea>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn" onclick="goTo(0)">← Back</button>
+        <button class="btn btn-primary" onclick="goToValidated(2)">Next: Risk matrix →</button>
+      </div>
+    </div>
+
+    <!-- ── SECTION 2: Risks & Controls (merged) ── -->
+    <div class="section" id="s2">
+      <span class="print-section-title">Section 3 — Risks &amp; Controls</span>
+      <div class="sec-title">Risks &amp; controls</div>
+      <div class="sec-sub">Fill one card per risk. The control section expands automatically when you select "Yes" or "In Dev".</div>
+      <div class="callout">Fill at least 3 risks. <strong>Impact (auto)</strong> = highest of the 4 dimensions. <strong>Inherent Risk (auto)</strong> = Impact × Likelihood. Financial and customer thresholds change by country.</div>
+
+      <div id="risk-cards"></div>
+      <button class="btn btn-sm" onclick="addRisk()" style="margin-bottom:1rem">+ Add risk</button>
+
+      <div class="nav-row">
+        <button class="btn" onclick="goTo(1)">← Back</button>
+        <button class="btn btn-primary" onclick="goToValidated(3)">Next: Defense concerns →</button>
+      </div>
+    </div>
+
+    <!-- ── SECTION 3: Defense ── -->
+    <div class="section" id="s3">
+      <span class="print-section-title">Section 4 — Defense Team Concerns</span>
+      <div class="sec-title">Defense team concerns</div>
+      <div class="sec-sub">Address each concern that applies. Write "N/A — [reason]" if not applicable. Do not leave blank.</div>
+      <div class="callout warn">Unanswered "Very High" or "High" concerns may block your launch.</div>
+
+      <div id="defense-content"></div>
+
+      <div class="nav-row">
+        <button class="btn" onclick="goTo(2)">← Back</button>
+        <button class="btn btn-primary" onclick="goToValidated(4)">View summary →</button>
+      </div>
+    </div>
+
+    <!-- ── SECTION 4: Summary ── -->
+    <div class="section" id="s4">
+      <span class="print-section-title">Section 5 — Summary</span>
+      <div class="sec-title">Summary</div>
+      <div class="sec-sub">Overview of your completed Risk Self Assessment. Export to PDF when ready.</div>
+
+      <div id="summary-content"></div>
+
+      <div class="nav-row">
+        <button class="btn" onclick="goTo(3)">← Back</button>
+        <span style="font-size:12px;color:var(--gray-400)">Use the Export PDF button at the top to download.</span>
+      </div>
+    </div>
+
+  </div><!-- /card -->
+</div><!-- /shell -->
+
+<script>
+// ── People directory (Global Lending) ─────────────────────────────────────────
+// ── People data — real Nubankers fetched from Slack ──────────────────────────
+// Used as instant fallback when the worker proxy is not yet configured.
+const PEOPLE_STATIC = [
+  // BCO / Risk
+  {name:'Ingrid Sgulmar',         handle:'ingrid.sgulmar',         title:'Lead BCO'},
+  {name:'Christiane Belem',       handle:'christiane.belem',       title:'Senior BCO'},
+  {name:'Giovana Andrade',        handle:'giovana.andrade',        title:'Lead BCO'},
+  {name:'Marina Magalhães',       handle:'marina.magalhaes',       title:'Senior BCO'},
+  {name:'Vanessa Takami',         handle:'vanessa.takami',         title:'Senior BCO'},
+  {name:'Marina Amorim',          handle:'marina.amorim',          title:'Senior BCO'},
+  {name:'Andresa Barreto',        handle:'andresa.barreto',        title:'Business Control Officer'},
+  {name:'Gaulthier Berger',       handle:'gaulthier.berger',       title:'BCO Director'},
+  {name:'Mariana Bacchin',        handle:'mariana.bacchin',        title:'Operational Risk Senior Director'},
+  {name:'Magdiel Puig',           handle:'magdiel.puig',           title:'Operational Risk Senior Expert'},
+  {name:'Mayara Zenati',          handle:'mayara.zenati',          title:'Operational Risk Manager'},
+  {name:'Fernando Martins',       handle:'fernando.martins',       title:'Operational Risk Specialist'},
+  {name:'Kaue Camillo',           handle:'kaue.camillo',           title:'Operational Risk Senior Specialist'},
+  // PMs
+  {name:'Gabriela Oeda',          handle:'gabriela.oeda',          title:'Product Management Senior Manager'},
+  {name:'Daniel Müller da Veiga', handle:'daniel.muller',          title:'Lead Product Manager'},
+  {name:'Mônica Bezerra',         handle:'monica.bezerra',         title:'Lead Product Manager'},
+  {name:'Shindi Kawato',          handle:'stefano.kawato',         title:'Lead Product Manager'},
+  {name:'Felipe Goh',             handle:'felipe.goh',             title:'Lead Product Manager'},
+  {name:'Patricia Oda',           handle:'patricia.oda',           title:'Lead Product Manager'},
+  {name:'Wesley Santos',          handle:'wesley.santos',          title:'Lead Product Manager'},
+  {name:'Camila Rey',             handle:'camila.rey',             title:'Lead Product Manager'},
+  {name:'Lourdes Pérez',          handle:'lourdes.perez',          title:'Product Manager II'},
+  {name:'Emilio Gonzalez',        handle:'emilio.gonzalez',        title:'General Manager'},
+  // Product Ops
+  {name:'Paola Garcia',           handle:'paola.malherbe',         title:'Lead Product Operations'},
+  {name:'Camila Olivieri',        handle:'camila.olivieri',        title:'Product Operations II'},
+  {name:'Bruno Evaldt',           handle:'bruno.evaldt',           title:'Product Operations II'},
+  {name:'Alexandre Cimorelli',    handle:'alexandre.cimorelli',    title:'Product Operations Manager III'},
+  {name:'Victor Carozzi',         handle:'victor.carozzi',         title:'Product Operations II'},
+  {name:'Rayssa Fernandes',       handle:'rayssa.fernandes',       title:'Product Operations II'},
+  {name:'Gustavo Lodi',           handle:'gustavo.lodi',           title:'Product Operations II'},
+  {name:'Pedro Molina',           handle:'pedro.molina',           title:'Product Operations Manager III'},
+  {name:'Felipe Higa',            handle:'felipe.higa',            title:'Product Operations II'},
+  // Engineering
+  {name:'Daniela Maior',          handle:'daniela.maior',          title:'Staff Software Engineer'},
+  {name:'Danilo Buiatti',         handle:'danilo.buiatti',         title:'Staff Software Engineer'},
+  {name:'Ygor Magalhães',         handle:'ygor.magalhaes',         title:'Senior Software Engineer'},
+  {name:'Denise Silva',           handle:'denise.silva',           title:'Senior Software Engineer'},
+  {name:'Renato Andrade',         handle:'renato.andrade',         title:'Senior Software Engineer'},
+  {name:'Ruan Silva',             handle:'ruan.silva',             title:'Senior Software Engineer'},
+  {name:'Flavia Adduci',          handle:'flavia.adduci',          title:'Lead Business Analyst'},
+  {name:'Jorge Espinosa',         handle:'jorge.espinosa',         title:'Lead Business Analyst'},
+  {name:'Tiago Sammarco',         handle:'tiago.sammarco',         title:'Business Analytics Director'},
+  {name:'Olivia Silva',           handle:'olivia.ziller',          title:'Lead Data Scientist'},
+  // Regulatory / MX / COL
+  {name:'Aline Romero',           handle:'aline.rodriguez',        title:'Regulatory Solutions Specialist'},
+  {name:'José Montes de Oca',     handle:'jose.montes',            title:'Regulatory Solutions Specialist'},
+  {name:'Alejandro Arriaga',      handle:'alejandro.arriaga',      title:'Senior Business Analyst'},
+  {name:'Eduardo Espinosa',       handle:'eduardo.gutierrez',      title:'Senior Business Analyst'},
+];
+
+// ── Slack search — worker proxy with static fallback ─────────────────────────
+// Set this to your deployed Cloudflare Worker URL once you deploy it.
+// Leave empty to use the static list only.
+const WORKER_URL = '';   // e.g. 'https://rsa-slack-proxy.your-name.workers.dev'
+
+let taCache = {};
+let taTimers = {};
+
+function searchStatic(query) {
+  const q = query.toLowerCase();
+  return PEOPLE_STATIC.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.handle.toLowerCase().includes(q) ||
+    p.title.toLowerCase().includes(q)
+  ).slice(0, 7);
+}
+
+async function searchSlack(query) {
+  if (taCache[query]) return taCache[query];
+
+  // If worker is configured, use it for live Slack search
+  if (WORKER_URL) {
+    try {
+      const res = await fetch(`${WORKER_URL}?q=${encodeURIComponent(query)}`);
+      if (res.ok) {
+        const data = await res.json();
+        taCache[query] = data;
+        return data;
+      }
+    } catch(e) { /* fall through to static */ }
+  }
+
+  // Fallback: instant static search
+  const results = searchStatic(query);
+  taCache[query] = results;
+  return results;
+}
+
+function initials(name) {
+  return (name||'?').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+
+function typeahead(input, listId) {
+  const list = document.getElementById(listId);
+  if (!list) return;
+  const raw = input.value;
+  const parts = raw.split(',');
+  const query = parts[parts.length - 1].replace(/^@/,'').trim();
+
+  if (query.length < 2) { list.classList.remove('open'); list.innerHTML = ''; return; }
+
+  const inputId = input.id || listId + '-input';
+  if (!input.id) input.id = inputId; // ensure input has an id
+
+  const renderList = (people, container) => {
+    container.innerHTML = people.map(p => `
+      <li onclick="selectHandle('${inputId}','${listId}','@${p.handle}')">
+        <div class="ta-avatar">${initials(p.name)}</div>
+        <div>
+          <div class="ta-name">${p.name}</div>
+          <div class="ta-meta">@${p.handle}${p.title ? ' · ' + p.title : ''}</div>
+        </div>
+      </li>`).join('');
+    container.classList.add('open');
+  };
+
+  const staticMatches = searchStatic(query);
+  if (staticMatches.length) {
+    renderList(staticMatches, list);
+  } else {
+    list.innerHTML = `<li style="padding:10px 12px;color:var(--gray-400);font-size:12px;cursor:default">No results found</li>`;
+    list.classList.add('open');
+  }
+
+  // Debounce live search (only when worker is configured)
+  clearTimeout(taTimers[listId]);
+  if (WORKER_URL) {
+    taTimers[listId] = setTimeout(async () => {
+      const people = await searchSlack(query);
+      const currentList = document.getElementById(listId);
+      const currentInput = document.getElementById(inputId);
+      if (!currentList || !currentInput) return;
+      const currentQuery = currentInput.value.split(',').pop().replace(/^@/,'').trim();
+      if (currentQuery.length < 2) { currentList.classList.remove('open'); return; }
+      if (people.length) renderList(people, currentList);
+    }, 400);
+  }
+}
+
+function selectHandle(inputId, listId, handle) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const parts = input.value.split(',');
+  parts[parts.length - 1] = ' ' + handle;
+  input.value = parts.join(',').replace(/^,?\s*/,'') + ', ';
+  // Sync to risk owner state if applicable
+  const cb = input.getAttribute('oninput');
+  if (cb && cb.includes('risks.find')) {
+    try { const fn = new Function('event', cb.split(';')[0]); fn.call(input, null); } catch(e){}
+  }
+  closeTypeahead(listId, 0);
+  input.focus();
+}
+
+function closeTypeahead(listId, delay) {
+  setTimeout(() => {
+    const list = document.getElementById(listId);
+    if (list) list.classList.remove('open');
+  }, delay);
+}
+const FIN = {
+  BR:  ['Minor: BR ≤ 5 MM USD','Moderate: BR > 5 and ≤ 10 MM USD','Critical: BR > 10 and < 20 MM USD','Extreme: BR ≥ 20 MM USD'],
+  MX:  ['Minor: MX ≤ 3 MM USD','Moderate: MX > 3 and ≤ 6 MM USD','Critical: MX > 6 and < 12 MM USD','Extreme: MX ≥ 12 MM USD'],
+  COL: ['Minor: COL ≤ 1.6 MM USD','Moderate: COL > 1.6 and ≤ 3.6 MM USD','Critical: COL > 3.6 and < 7.8 MM USD','Extreme: COL ≥ 7.8 MM USD'],
+};
+const CUST = {
+  BR:  ['Minor: ≤ 1,000,000','Moderate: > 1M and ≤ 2.5M','Critical: > 2.5M and ≤ 5M','Extreme: > 5,000,000'],
+  MX:  ['Minor: ≤ 315,000','Moderate: > 315k and ≤ 630k','Critical: > 630k and ≤ 1.26M','Extreme: > 1,260,000'],
+  COL: ['Minor: ≤ 5,400','Moderate: > 5.4k and ≤ 13.5k','Critical: > 13.5k and ≤ 27k','Extreme: > 27,000'],
+};
+const REP = ['Minor: Local damage, resolved internally','Moderate: National coverage, 1 product line','Critical: National coverage, all product lines','Extreme: International, multiple countries'];
+const REG = ['Minor: 0–1 of: Hot Topic, notified regulators, finding, recurring','Moderate: Combination of 2','Critical: Combination of 3','Extreme: 4+ criteria + criminal list'];
+const LKHOOD = ['Rare','Unlikely','Likely','Very likely'];
+const CATS = ['Strategic Risk','Model Risk','Wholesale Credit Risk','Liquidity Risk','Market and IRRBB Risk','Retail Credit Risk','Capital Adequacy Risk','Technology and Cybersecurity Risk','Compliance and Legal Risk','Operational Risk','People Risk','Financial Crime Risk','Governance and Environmental Risk'];
+const CTYPE = ['Preventive','Detective','Corrective'];
+const CEXEC = ['Automatic','Semi-automatic','Manual'];
+const CFREQ = ['On demand','Multiple times per day','Daily','Weekly','Monthly','Annually'];
+const IRANK = {Minor:1,Moderate:2,Critical:3,Extreme:4};
+const LRANK = {Rare:1,Unlikely:2,Likely:3,'Very likely':4};
+
+const SQUADS = [
+  {name:'Legal', concerns:[
+    {t:'Regulatory grey area / bypass',w:'Are we navigating around a regulation? Is a formal regulator consultation needed to avoid suspension or sanctions?'}
+  ]},
+  {name:'Data Protection (LGPD)', concerns:[
+    {t:'Illegitimate personal data collection or use',w:'Does the privacy policy cover this use? Is the purpose registered in the RoPA? Is data minimized to what is strictly necessary?'},
+    {t:'Data subject rights',w:'How can customers access, correct, or delete their data? Is a deletion flow built or does it need to be?'}
+  ]},
+  {name:'Regulatory Compliance', concerns:[
+    {t:'Accessibility and vulnerable customers',w:'Is the product fully accessible (screen readers)? Does it follow the Vulnerable Public Procedure?'},
+    {t:'Customer relationship',w:'Are FAQ and Guru ready? Has the Ombudsman been notified? Is the journey clear, fair, and non-harmful? (Res. BCB 155/21)'}
+  ]},
+  {name:'Operational Risk', concerns:[
+    {t:'Business continuity (BCM / BIA)',w:'Is this product or feature critical? Is it in the BIA? What happens if the system goes down?'},
+    {t:'Manual activities',w:'Are there manual processes without scalability, carrying a high risk of human or system error?'},
+    {t:'Operational financial losses',w:'Where will operational losses be captured? How do they feed into the P&L? (Ref: Global Lending BBDRO Governance)'}
+  ]},
+  {name:'IT Risk / Security', concerns:[
+    {t:'Data encryption',w:'Have sensitive data types (PII) been mapped? What encryption methods will be used (HTTPS, mTLS, AES-256)?'},
+    {t:'Access control',w:'Who can access what, and how? Are authentication (biometrics, API keys) and authorization (IAM, OAuth) defined?'},
+    {t:'Secure 3rd-party integrations',w:'Is there a DPA? Is shared data minimized? Does the API follow the Security Guideline for APIs?'},
+    {t:'Automated attack prevention',w:'Does the product have internet exposure? Are rate limiting, WAF, CAPTCHA, or MFA planned?'},
+    {t:'Regulatory compliance (IT)',w:'Do PCI DSS, LGPD, BACEN, or SOX apply? Identifying early prevents costly architecture redesigns.'}
+  ]},
+  {name:'Fraud', concerns:[
+    {t:'Account tenure',w:'Is the product restricted to customers with ≥ 3 closed invoices or 90 days with NuConta?'},
+    {t:'Contestation integration',w:'For Lending products: has contestation integration been tested on staging and confirmed working?'},
+    {t:'Mandatory PIN',w:'Every transaction in this product requires a PIN. Is this enforced?'},
+    {t:'Trusted device certificate',w:'Is the device certificate verified? If not trusted, is a Liveness Challenge triggered?'},
+    {t:'ATO / Lending issuance rule',w:'Is there protection against issued-amount evasion in ATO scenarios? (Cumulative limit: R$1k BR / MX$20k in 24h)'},
+    {t:'Fraud rate monitoring',w:'Will the fraud rate be monitored for all Modus Operandi (identity fraud, ATO, contestation, etc.)?'}
+  ]},
+  {name:'OPS Release', concerns:[
+    {t:'Customer service operational structure',w:'Does this product require a new operation, impact an existing one, or need no operational support? Open ticket for @ops-release if new.'},
+    {t:'Operational budget',w:'If a new operation is needed: budget forecast for internal headcount (pre-launch) and external (launch)?'}
+  ]},
+  {name:'Cross Demands', concerns:[
+    {t:'Deceased customer cancellation',w:'Auto-cancellation in place? Widget on shuffle? Manual redemption in backoffice? Contact @cx_obito_mgmt.'},
+    {t:'XPP behavioral cancellation',w:'When XPP cancels an account, is this product also automatically scheduled for cancellation?'},
+    {t:'Voluntary account cancellation',w:'Can customers cancel their account with this product active? Do Xpeers have all the tools needed?'}
+  ]},
+];
+
+// ── State ────────────────────────────────────────────────────────────────────
+let cur = 0;
+let globalCountry = 'BR'; // locked after first risk sets it
+let risks = [{id:1, country:'BR', owner:'', desc:'', consequence:'', cat:'', fin:'', rep:'', reg:'', cust:'', lik:'', ctrlEx:''}];
+let ctrls = {};
+const defAns = {};
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function iRank(v) { return IRANK[v ? v.split(':')[0].trim() : ''] || 0; }
+function calcImpact(r) { return Math.max(iRank(r.fin), iRank(r.rep), iRank(r.reg), iRank(r.cust)); }
+function impactLbl(n) { return ['','Minor','Moderate','Critical','Extreme'][n] || ''; }
+function calcInherent(imp, lik) {
+  const s = imp * (LRANK[lik] || 0);
+  if (!s) return '';
+  if (s <= 2) return 'Low';
+  if (s <= 6) return 'Medium';
+  if (s <= 9) return 'High';
+  return 'Critical';
+}
+function badgeCls(v) {
+  if (!v) return 'b-na';
+  const l = v.toLowerCase();
+  if (l === 'critical' || l === 'extreme') return 'b-crit';
+  if (l === 'high') return 'b-high';
+  if (l === 'medium' || l === 'moderate') return 'b-med';
+  return 'b-low';
+}
+function badge(v) {
+  if (!v) return '<span class="badge b-na">—</span>';
+  return `<span class="badge ${badgeCls(v)}">${v}</span>`;
+}
+function sel(opts, val, cb, ph) {
+  const os = opts.map(o => `<option value="${o}"${o===val?' selected':''}>${o}</option>`).join('');
+  return `<select onchange="${cb}">${ph?`<option value=""${!val?' selected':''}>${ph}</option>`:''}${os}</select>`;
+}
+function getCtrl(id) {
+  return ctrls[id] || (ctrls[id] = {name:'',desc:'',type:'',exec:'',freq:'',ctrlin:'No',link:'',gap:'No',next:'',owner:''});
+}
+function esc(s) { return (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Risk cards with inline control section ────────────────────────────────────
+function renderRisks() {
+  const el = document.getElementById('risk-cards');
+  if (!el) return;
+  el.innerHTML = risks.map((r, i) => {
+    const fin  = FIN[r.country]  || FIN.BR;
+    const cus  = CUST[r.country] || CUST.BR;
+    const iNum = calcImpact(r);
+    const iLbl = impactLbl(iNum);
+    const inh  = calcInherent(iNum, r.lik);
+    const ct   = getCtrl(r.id);
+    const showCtrl = r.ctrlEx === 'Yes' || r.ctrlEx === 'In Dev';
+
+    return `<div class="risk-card">
+      <div class="risk-card-head">
+        <span class="risk-num">Risk ${i+1}</span>
+        ${risks.length > 1 ? `<button class="btn btn-danger" onclick="removeRisk(${r.id})">Remove</button>` : ''}
+      </div>
+
+      <div class="row2">
+        <div class="field" style="margin:0">
+          <label>Country ${i > 0 ? `<span class="country-lock">locked to ${globalCountry}</span>` : ''}</label>
+          ${i === 0
+            ? sel(['BR','MX','COL'], r.country, `updateR(${r.id},'country',this.value)`, 'Select...')
+            : `<select disabled style="opacity:.55;cursor:not-allowed"><option selected>${globalCountry}</option></select>`
+          }
+        </div>
+        <div class="field" style="margin:0">
+          <label>Risk owner</label>
+          <div class="typeahead-wrap">
+            <input type="text" id="ta-owner-input-${r.id}" value="${esc(r.owner)}" placeholder="Type a name or @handle..." autocomplete="off"
+              oninput="risks.find(x=>x.id===${r.id}).owner=this.value; typeahead(document.getElementById('ta-owner-input-${r.id}'),'ta-owner-${r.id}')"
+              onblur="closeTypeahead('ta-owner-${r.id}',300)">
+            <ul class="typeahead-list" id="ta-owner-${r.id}"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>What could go wrong? <span class="hint">— description + root cause</span></label>
+        <textarea oninput="risks.find(x=>x.id===${r.id}).desc=this.value" placeholder="e.g. Customer data exposed via API failure due to missing authentication">${esc(r.desc)}</textarea>
+      </div>
+      <div class="field">
+        <label>Main consequence if it happens</label>
+        <textarea oninput="risks.find(x=>x.id===${r.id}).consequence=this.value" placeholder="e.g. PII leak → LGPD fine, reputational damage, customer churn" style="min-height:52px">${esc(r.consequence)}</textarea>
+      </div>
+      <div class="row2">
+        <div class="field" style="margin:0">
+          <label>Risk category</label>
+          ${sel(CATS, r.cat, `updateR(${r.id},'cat',this.value)`, 'Select category...')}
+        </div>
+        <div class="field" style="margin:0">
+          <label>Likelihood</label>
+          ${sel(LKHOOD, r.lik, `updateR(${r.id},'lik',this.value)`, 'Select...')}
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field" style="margin:0">
+          <label>Financial impact <span class="hint">(${r.country||'select country'})</span></label>
+          ${sel(fin, r.fin, `updateR(${r.id},'fin',this.value)`, 'Select...')}
+        </div>
+        <div class="field" style="margin:0">
+          <label>Reputational impact</label>
+          ${sel(REP, r.rep, `updateR(${r.id},'rep',this.value)`, 'Select...')}
+        </div>
+      </div>
+      <div class="row2">
+        <div class="field" style="margin:0">
+          <label>Regulatory impact</label>
+          ${sel(REG, r.reg, `updateR(${r.id},'reg',this.value)`, 'Select...')}
+        </div>
+        <div class="field" style="margin:0">
+          <label>Customer impact <span class="hint">(${r.country||'select country'})</span></label>
+          ${sel(cus, r.cust, `updateR(${r.id},'cust',this.value)`, 'Select...')}
+        </div>
+      </div>
+
+      <div class="auto-row">
+        <span class="auto-label">Impact (auto):</span>
+        ${badge(iLbl)}
+        <span class="auto-label" style="margin-left:12px">Inherent risk (auto):</span>
+        ${badge(inh)}
+        <div style="margin-left:auto; display:flex; align-items:center; gap:8px">
+          <span class="auto-label">Control exists?</span>
+          ${sel(['Yes','No','In Dev'], r.ctrlEx, `updateR(${r.id},'ctrlEx',this.value)`, 'Select...')}
+        </div>
+      </div>
+
+      ${showCtrl ? `
+      <div class="ctrl-section">
+        <div class="ctrl-section-title">Control</div>
+        <div class="row2">
+          <div class="field" style="margin:0">
+            <label>Control name</label>
+            <input type="text" value="${esc(ct.name)}" placeholder="e.g. Rate limiting + TLS" oninput="getCtrl(${r.id}).name=this.value">
+          </div>
+          <div class="field" style="margin:0">
+            <label>Owner</label>
+            <input type="text" value="${esc(ct.owner)}" placeholder="e.g. Platform Eng." oninput="getCtrl(${r.id}).owner=this.value">
+          </div>
+        </div>
+        <div class="field">
+          <label>How does it work? <span class="hint">— how does it mitigate the risk?</span></label>
+          <textarea oninput="getCtrl(${r.id}).desc=this.value" placeholder="e.g. Limits API calls to 100/min and encrypts data in transit with TLS 1.2+">${esc(ct.desc)}</textarea>
+        </div>
+        <div class="row3">
+          <div class="field" style="margin:0">
+            <label>Control type</label>
+            ${sel(CTYPE, ct.type, `updateC(${r.id},'type',this.value)`, 'Select...')}
+          </div>
+          <div class="field" style="margin:0">
+            <label>Execution</label>
+            ${sel(CEXEC, ct.exec, `updateC(${r.id},'exec',this.value)`, 'Select...')}
+          </div>
+          <div class="field" style="margin:0">
+            <label>Frequency</label>
+            ${sel(CFREQ, ct.freq, `updateC(${r.id},'freq',this.value)`, 'Select...')}
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field" style="margin:0">
+            <label>Is a Controlinho?</label>
+            ${sel(['Yes','No'], ct.ctrlin, `updateC(${r.id},'ctrlin',this.value)`, 'Select...')}
+          </div>
+          <div class="field" style="margin:0">
+            <label>Gap?</label>
+            ${sel(['Yes','No'], ct.gap, `updateC(${r.id},'gap',this.value)`, 'Select...')}
+          </div>
+        </div>
+        ${ct.ctrlin === 'Yes' ? `<div class="field"><label>Controlinho GitHub link</label><input type="text" value="${esc(ct.link)}" placeholder="https://github.com/nubank/..." oninput="getCtrl(${r.id}).link=this.value"></div>` : ''}
+        ${ct.gap === 'Yes' ? `<div class="field"><label>Next steps / action plan</label><input type="text" value="${esc(ct.next)}" placeholder="e.g. Implement WAF by Q2" oninput="getCtrl(${r.id}).next=this.value"></div>` : ''}
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// ── Defense ──────────────────────────────────────────────────────────────────
+function renderDefense() {
+  const el = document.getElementById('defense-content');
+  if (!el) return;
+  el.innerHTML = SQUADS.map((sq, si) => `
+    <div class="squad-head">${sq.name}</div>
+    ${sq.concerns.map((cn, ci) => {
+      const key = `${si}-${ci}`;
+      return `<div class="concern-row">
+        <div>
+          <div class="concern-label">${cn.t}</div>
+          <div class="concern-why">${cn.w}</div>
+        </div>
+        <textarea style="min-height:60px" placeholder='Your perspective, mitigators, and action plan. Write "N/A — [reason]" if not applicable.' oninput="defAns['${key}']=this.value">${esc(defAns[key]||'')}</textarea>
+      </div>`;
+    }).join('')}
+  `).join('');
+}
+
+// ── Summary ──────────────────────────────────────────────────────────────────
+function renderSummary() {
+  const el = document.getElementById('summary-content');
+  if (!el) return;
+  const total = risks.length;
+  const high = risks.filter(r => { const inh = calcInherent(calcImpact(r),r.lik); return inh==='High'||inh==='Critical'; }).length;
+  const answered = Object.values(defAns).filter(v => v.trim()).length;
+  const totalConcerns = SQUADS.reduce((a,s) => a+s.concerns.length, 0);
+  const rfc = document.getElementById('f-rfc')?.value || '—';
+  const pm  = document.getElementById('f-pm')?.value  || '—';
+
+  el.innerHTML = `
+    <div class="callout" style="margin-bottom:1rem">
+      <strong>${rfc}</strong> &nbsp;·&nbsp; PM: ${esc(pm)} &nbsp;·&nbsp; ${new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}
+    </div>
+    ${high > 0 ? `<div class="callout warn" style="margin-bottom:1rem">⚠ ${high} High / Critical risk(s) found. These must have controls or an action plan before launch.</div>` : ''}
+    <div class="stats">
+      <div class="stat-card"><div class="stat-lbl">Risks identified</div><div class="stat-val">${total}</div></div>
+      <div class="stat-card"><div class="stat-lbl">High / Critical</div><div class="stat-val" style="color:${high>0?'var(--red)':'var(--green)'}">${high}</div></div>
+      <div class="stat-card"><div class="stat-lbl">Defense concerns answered</div><div class="stat-val">${answered}<span style="font-size:14px;color:var(--gray-400)"> / ${totalConcerns}</span></div></div>
+    </div>
+    <div class="summary-title">Risk matrix</div>
+    <table class="summary-table" style="margin-bottom:1.5rem">
+      <thead><tr><th>#</th><th>Description</th><th>Category</th><th>Inherent risk</th><th>Control</th></tr></thead>
+      <tbody>${risks.map((r,i) => {
+        const inh = calcInherent(calcImpact(r), r.lik);
+        return `<tr>
+          <td>${i+1}</td>
+          <td>${r.desc ? esc(r.desc.slice(0,70))+(r.desc.length>70?'…':'') : '<span class="muted">Not filled</span>'}</td>
+          <td style="color:var(--gray-400)">${r.cat||'—'}</td>
+          <td>${badge(inh||'')}</td>
+          <td>${r.ctrlEx||'—'}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table>
+    <div class="summary-title">Defense concerns</div>
+    <table class="summary-table">
+      <thead><tr><th>Squad</th><th>Concern</th><th>Status</th></tr></thead>
+      <tbody>${SQUADS.flatMap((sq,si) => sq.concerns.map((cn,ci) => {
+        const ans = defAns[`${si}-${ci}`]||'';
+        return `<tr><td style="color:var(--gray-400)">${sq.name}</td><td>${cn.t}</td><td>${ans.trim() ? '<span class="badge b-low">Answered</span>' : '<span class="badge b-na">Pending</span>'}</td></tr>`;
+      })).join('')}</tbody>
+    </table>`;
+}
+
+// ── Validation ────────────────────────────────────────────────────────────────
+const REQUIRED_BY_SECTION = {
+  0: [
+    {id:'f-rfc',      label:'RFC / Product name'},
+    {id:'f-pm',       label:'Product Manager'},
+    {id:'f-country',  label:'Country'},
+    {id:'f-abstract', label:'Product summary'},
+  ],
+  1: [
+    {id:'f-stmt',   label:'What could go wrong?'},
+    {id:'f-mitig',  label:'Known mitigators'},
+  ],
+};
+
+function validateSection(n) {
+  let errors = [];
+
+  // Static field validation (sections 0 and 1)
+  if (REQUIRED_BY_SECTION[n]) {
+    REQUIRED_BY_SECTION[n].forEach(({id, label}) => {
+      const el = document.getElementById(id);
+      const val = el ? el.value.trim() : '';
+      el && el.classList.remove('field-error');
+      if (val.length < 3) {
+        errors.push(label);
+        el && el.classList.add('field-error');
+      }
+    });
+  }
+
+  // Risks & Controls section
+  if (n === 2) {
+    risks.forEach((r, i) => {
+      const num = i + 1;
+      const textFields = [
+        {v: r.owner,       l: `Risk ${num}: Owner`},
+        {v: r.desc,        l: `Risk ${num}: What could go wrong?`},
+        {v: r.consequence, l: `Risk ${num}: Consequence`},
+      ];
+      textFields.forEach(({v, l}) => {
+        if (!v || v.trim().length < 3) errors.push(l);
+      });
+      const selFields = [
+        {v: r.cat,   l: `Risk ${num}: Category`},
+        {v: r.lik,   l: `Risk ${num}: Likelihood`},
+        {v: r.fin,   l: `Risk ${num}: Financial impact`},
+        {v: r.rep,   l: `Risk ${num}: Reputational impact`},
+        {v: r.reg,   l: `Risk ${num}: Regulatory impact`},
+        {v: r.cust,  l: `Risk ${num}: Customer impact`},
+        {v: r.ctrlEx,l: `Risk ${num}: Control exists?`},
+      ];
+      selFields.forEach(({v, l}) => {
+        if (!v) errors.push(l);
+      });
+      // If control exists, validate control fields too
+      if (r.ctrlEx === 'Yes' || r.ctrlEx === 'In Dev') {
+        const ct = ctrls[r.id] || {};
+        if (!ct.name || ct.name.trim().length < 3) errors.push(`Risk ${num} control: Name`);
+        if (!ct.desc || ct.desc.trim().length < 3) errors.push(`Risk ${num} control: How does it work?`);
+        if (!ct.type)  errors.push(`Risk ${num} control: Type`);
+        if (!ct.exec)  errors.push(`Risk ${num} control: Execution`);
+        if (!ct.freq)  errors.push(`Risk ${num} control: Frequency`);
+      }
+    });
+  }
+
+  if (errors.length > 0) {
+    showValidationToast(errors);
+    return false;
+  }
+  clearValidationToast();
+  return true;
+}
+
+function showValidationToast(errors) {
+  let toast = document.getElementById('val-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'val-toast';
+    toast.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2a2a28;color:#fff;border-radius:10px;padding:12px 20px;font-size:13px;font-family:inherit;z-index:9999;max-width:480px;box-shadow:0 4px 20px rgba(0,0,0,.2);line-height:1.5';
+    document.body.appendChild(toast);
+  }
+  const list = errors.slice(0, 5).map(e => `• ${e}`).join('<br>');
+  const more = errors.length > 5 ? `<br><span style="color:#a0a09a">…and ${errors.length - 5} more</span>` : '';
+  toast.innerHTML = `<strong>Please complete required fields (min. 3 characters):</strong><br>${list}${more}`;
+  toast.style.display = 'block';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { toast.style.display = 'none'; }, 5000);
+}
+
+function clearValidationToast() {
+  const toast = document.getElementById('val-toast');
+  if (toast) toast.style.display = 'none';
+}
+
+function goToValidated(n) {
+  // Flush text state before validating
+  document.querySelectorAll('#risk-cards input[type=text], #risk-cards textarea').forEach(el => {
+    const cb = el.getAttribute('oninput');
+    if (cb) { try { (new Function('event', cb)).call(el, null); } catch(e){} }
+  });
+  if (!validateSection(cur)) return;
+  goTo(n);
+}
+function goTo(n) {
+  document.querySelectorAll('.section').forEach((s, i) => s.classList.toggle('active', i === n));
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === n);
+    t.classList.toggle('done', i < n);
+  });
+  cur = n;
+  if (n === 3) renderDefense();
+  if (n === 4) renderSummary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── State updates ─────────────────────────────────────────────────────────────
+function addRisk() {
+  risks.push({id: Date.now(), country: globalCountry, owner:'', desc:'', consequence:'', cat:'', fin:'', rep:'', reg:'', cust:'', lik:'', ctrlEx:''});
+  renderRisks();
+}
+function removeRisk(id) { risks = risks.filter(r => r.id !== id); renderRisks(); }
+
+function updateR(id, f, v) {
+  const r = risks.find(r => r.id === id);
+  if (!r) return;
+  const needsFullRender = (f === 'country' || f === 'lik' || f === 'fin' || f === 'rep' || f === 'reg' || f === 'cust' || f === 'ctrlEx');
+  if (f === 'country') {
+    // Lock country globally and propagate to all risks
+    globalCountry = v;
+    risks.forEach(rr => { rr.country = v; rr.fin = ''; rr.cust = ''; });
+  }
+  r[f] = v;
+  if (needsFullRender) renderRisks();
+}
+
+function updateC(id, f, v) {
+  const ct = getCtrl(id);
+  ct[f] = v;
+  // Auto-set execution to Semi-automatic when Controlinho = Yes
+  if (f === 'ctrlin' && v === 'Yes') {
+    ct.exec = 'Semi-automatic';
+  }
+  const needsFullRender = (f === 'ctrlin' || f === 'gap');
+  if (needsFullRender) renderRisks();
+}
+
+// ── PDF export with html2pdf ──────────────────────────────────────────────────
+function exportPDF() {
+  // Flush text state first
+  document.querySelectorAll('#risk-cards input[type=text], #risk-cards textarea').forEach(el => {
+    const cb = el.getAttribute('oninput');
+    if (cb) { try { (new Function('event', cb)).call(el, null); } catch(e){} }
+  });
+  // Validate all sections before exporting
+  for (let s = 0; s <= 2; s++) {
+    const prevCur = cur;
+    cur = s;
+    const ok = validateSection(s);
+    cur = prevCur;
+    if (!ok) {
+      goTo(s);
+      return;
+    }
+  }
+
+  // Ensure summary is fresh
+  renderSummary();
+
+  const btn = document.getElementById('pdf-btn-main');
+  const lbl = document.getElementById('pdf-btn-label');
+  if (btn) btn.disabled = true;
+  if (lbl) lbl.textContent = 'Generating…';
+
+  const rfc = document.getElementById('f-rfc')?.value || 'RSA';
+  const clean = rfc.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+  const filename = `RSA_${clean}_${new Date().toISOString().slice(0,10)}.pdf`;
+
+  // Flush all live text field values into state before building PDF
+  document.querySelectorAll('#risk-cards input[type=text], #risk-cards textarea').forEach(el => {
+    const cb = el.getAttribute('oninput');
+    if (cb) { try { (new Function('event', cb)).call(el, null); } catch(e){} }
+  });
+  // also capture defense textareas
+  document.querySelectorAll('#defense-content textarea').forEach(el => {
+    const cb = el.getAttribute('oninput');
+    if (cb) { try { (new Function('event', cb)).call(el, null); } catch(e){} }
+  });
+
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'font-family:Arial,sans-serif;font-size:11px;color:#2a2a28;max-width:780px;margin:0 auto;padding:0 8px';
+
+  // ── Header
+  const hdr = document.createElement('div');
+  hdr.style.cssText = 'background:#820AD1;padding:16px 20px;border-radius:8px;margin-bottom:20px';
+  hdr.innerHTML = `<div style="font-size:16px;font-weight:bold;color:#fff">Risk Self Assessment — NP&F+</div>
+    <div style="font-size:11px;color:#d4a8f0;margin-top:4px">Global Lending · ${new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})}</div>`;
+  wrapper.appendChild(hdr);
+
+  function addSection(titleText, contentEl) {
+    const sec = document.createElement('div');
+    sec.style.cssText = 'margin-bottom:24px';
+    const t = document.createElement('div');
+    t.style.cssText = 'font-size:13px;font-weight:bold;color:#820AD1;border-bottom:2px solid #f3e8fc;padding-bottom:6px;margin-bottom:12px';
+    t.textContent = titleText;
+    sec.appendChild(t);
+    sec.appendChild(contentEl);
+    wrapper.appendChild(sec);
+  }
+
+  function fieldRow(label, value) {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:180px 1fr;gap:8px;margin-bottom:6px;align-items:start';
+    row.innerHTML = `<div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:.4px;color:#5c5c58;padding-top:4px">${label}</div>
+      <div style="border:1px solid #e0dfd9;border-radius:6px;padding:6px 8px;font-size:11px;min-height:24px;background:#f9f9f8">${value||'<span style="color:#a0a09a">—</span>'}</div>`;
+    return row;
+  }
+
+  function badgeHtml(v) {
+    if (!v) return '<span style="background:#f0efeb;color:#a0a09a;padding:2px 8px;border-radius:12px;font-size:10px">—</span>';
+    const styles = {Critical:'background:#fee2e2;color:#7f1d1d',High:'background:#fdecea;color:#b32727',Medium:'background:#fef3dc;color:#7a4800',Low:'background:#e8f5ee;color:#1a6e3c',Minor:'background:#e8f5ee;color:#1a6e3c',Moderate:'background:#fef3dc;color:#7a4800',Extreme:'background:#fee2e2;color:#7f1d1d'};
+    const s = styles[v] || 'background:#f0efeb;color:#5c5c58';
+    return `<span style="${s};padding:2px 8px;border-radius:12px;font-size:10px;font-weight:bold">${v}</span>`;
+  }
+
+  // ── Section 1: Identification
+  const id0 = document.createElement('div');
+  [['RFC / Product name','f-rfc'],['Product Manager','f-pm'],['Author(s)','f-authors'],['BCO Reviewers','f-bco'],['Country','f-country'],['Status','f-status'],['Date','f-date']].forEach(([lbl,id]) => {
+    id0.appendChild(fieldRow(lbl, document.getElementById(id)?.value));
+  });
+  id0.appendChild(fieldRow('Product summary', (document.getElementById('f-abstract')?.value||'').replace(/\n/g,'<br>')));
+  addSection('1 — RFC Identification', id0);
+
+  // ── Section 2: Risk Statement
+  const id1 = document.createElement('div');
+  [['What could go wrong?','f-stmt'],['Known mitigators','f-mitig'],['Regulatory grey areas / doubts','f-regdoubts']].forEach(([lbl,id]) => {
+    id1.appendChild(fieldRow(lbl, (document.getElementById(id)?.value||'').replace(/\n/g,'<br>')));
+  });
+  addSection('2 — Initial Risk Statement', id1);
+
+  // ── Section 3: Risk Matrix
+  const id2 = document.createElement('div');
+  risks.forEach((r, i) => {
+    const iNum = calcImpact(r);
+    const iLbl = impactLbl(iNum);
+    const inh  = calcInherent(iNum, r.lik);
+    const card = document.createElement('div');
+    card.style.cssText = 'border:1px solid #e0dfd9;border-radius:8px;padding:12px;margin-bottom:10px;background:#f9f9f8';
+    card.innerHTML = `<div style="font-size:10px;font-weight:bold;color:#a0a09a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Risk ${i+1}</div>`;
+    [['Country',r.country],['Owner',r.owner],['What could go wrong?',r.desc],['Consequence',r.consequence],['Category',r.cat],['Likelihood',r.lik],['Financial impact',r.fin],['Reputational impact',r.rep],['Regulatory impact',r.reg],['Customer impact',r.cust]].forEach(([l,v]) => {
+      card.innerHTML += `<div style="display:grid;grid-template-columns:140px 1fr;gap:6px;margin-bottom:4px"><span style="font-size:10px;color:#5c5c58;font-weight:bold">${l}</span><span style="font-size:11px">${v||'<span style="color:#a0a09a">—</span>'}</span></div>`;
+    });
+    card.innerHTML += `<div style="margin-top:8px;padding-top:8px;border-top:1px solid #e0dfd9;display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:10px;color:#5c5c58">Impact (auto):</span>${badgeHtml(iLbl)}
+      <span style="font-size:10px;color:#5c5c58">Inherent risk (auto):</span>${badgeHtml(inh)}
+      <span style="font-size:10px;color:#5c5c58">Control exists?</span><span style="font-size:11px">${r.ctrlEx||'—'}</span>
+    </div>`;
+    id2.appendChild(card);
+  });
+  addSection('3 — Risks & Controls', id2);
+
+  // ── Section 3 (PDF): Controls — embedded within risks, summarised separately
+  const id3 = document.createElement('div');
+  const relevant = risks.filter(r => r.ctrlEx === 'Yes' || r.ctrlEx === 'In Dev');
+  if (!relevant.length) {
+    id3.innerHTML = '<p style="color:#a0a09a;font-size:11px;font-style:italic">No controls defined.</p>';
+  } else {
+    relevant.forEach(r => {
+      const ct = ctrls[r.id] || {};
+      const card = document.createElement('div');
+      card.style.cssText = 'border:1px solid #e0dfd9;border-radius:8px;padding:12px;margin-bottom:10px;background:#f9f9f8';
+      const lbl = r.desc ? r.desc.slice(0,60)+(r.desc.length>60?'…':'') : `Risk ${risks.indexOf(r)+1}`;
+      card.innerHTML = `<div style="font-size:10px;font-weight:bold;color:#a0a09a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Control for → ${lbl}</div>`;
+      [['Name',ct.name],['How it works',ct.desc],['Type',ct.type],['Execution',ct.exec],['Frequency',ct.freq],['Controlinho?',ct.ctrlin],['GitHub link',ct.link],['Gap?',ct.gap],['Next steps',ct.next],['Owner',ct.owner]].forEach(([l,v]) => {
+        if (!v) return;
+        card.innerHTML += `<div style="display:grid;grid-template-columns:120px 1fr;gap:6px;margin-bottom:4px"><span style="font-size:10px;color:#5c5c58;font-weight:bold">${l}</span><span style="font-size:11px">${v}</span></div>`;
+      });
+      id3.appendChild(card);
+    });
+  }
+  addSection('3b — Controls', id3);
+
+  // ── Section 4 (PDF): Defense
+  const id4 = document.createElement('div');
+  SQUADS.forEach((sq, si) => {
+    const grp = document.createElement('div');
+    grp.style.cssText = 'margin-bottom:14px';
+    grp.innerHTML = `<div style="font-size:11px;font-weight:bold;color:#3c3489;background:#eeedfe;padding:5px 10px;border-radius:6px;margin-bottom:6px">${sq.name}</div>`;
+    sq.concerns.forEach((cn, ci) => {
+      const ans = defAns[`${si}-${ci}`] || '';
+      grp.innerHTML += `<div style="display:grid;grid-template-columns:180px 1fr;gap:8px;margin-bottom:6px">
+        <div style="font-size:10px;font-weight:bold;color:#2a2a28;padding-top:4px">${cn.t}</div>
+        <div style="border:1px solid #e0dfd9;border-radius:6px;padding:6px 8px;font-size:11px;min-height:28px;background:${ans?'#fff':'#f9f9f8'}">${ans || '<span style="color:#a0a09a;font-style:italic">Not answered</span>'}</div>
+      </div>`;
+    });
+    id4.appendChild(grp);
+  });
+  addSection('4 — Defense Team Concerns', id4);
+
+  // ── Section 5 (PDF): Summary
+  const id5 = document.createElement('div');
+  const total = risks.length;
+  const high = risks.filter(r => { const inh = calcInherent(calcImpact(r),r.lik); return inh==='High'||inh==='Critical'; }).length;
+  const answered = Object.values(defAns).filter(v => v.trim()).length;
+  const totalConcerns = SQUADS.reduce((a,s) => a+s.concerns.length, 0);
+
+  let summaryHTML = `<div style="background:#f3e8fc;border-left:3px solid #820AD1;padding:8px 12px;border-radius:0 6px 6px 0;margin-bottom:12px;font-size:11px">
+    <strong>Risks identified:</strong> ${total} &nbsp;·&nbsp; <strong>High/Critical:</strong> ${high} &nbsp;·&nbsp; <strong>Defense concerns answered:</strong> ${answered}/${totalConcerns}
+  </div>`;
+  if (high > 0) {
+    summaryHTML += `<div style="background:#fff3e8;border-left:3px solid #d95c00;padding:8px 12px;border-radius:0 6px 6px 0;margin-bottom:12px;font-size:11px;color:#7a3800">
+      ${high} High / Critical risk(s) found — must have controls or action plan before launch.
+    </div>`;
+  }
+  summaryHTML += `<table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:16px">
+    <thead><tr style="background:#f0efeb">
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">#</th>
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Description</th>
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Category</th>
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Inherent risk</th>
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Control</th>
+    </tr></thead>
+    <tbody>${risks.map((r,i) => {
+      const inh = calcInherent(calcImpact(r), r.lik);
+      return `<tr style="border-bottom:1px solid #f0efeb">
+        <td style="padding:6px 8px">${i+1}</td>
+        <td style="padding:6px 8px">${r.desc ? r.desc.slice(0,60)+(r.desc.length>60?'…':'') : '<em style="color:#a0a09a">Not filled</em>'}</td>
+        <td style="padding:6px 8px;color:#5c5c58">${r.cat||'—'}</td>
+        <td style="padding:6px 8px">${badgeHtml(inh||'')}</td>
+        <td style="padding:6px 8px">${r.ctrlEx||'—'}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>
+  <table style="width:100%;border-collapse:collapse;font-size:11px">
+    <thead><tr style="background:#f0efeb">
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Squad</th>
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Concern</th>
+      <th style="text-align:left;padding:6px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e0dfd9">Status</th>
+    </tr></thead>
+    <tbody>${SQUADS.flatMap((sq,si) => sq.concerns.map((cn,ci) => {
+      const ans = defAns[`${si}-${ci}`]||'';
+      const status = ans.trim()
+        ? '<span style="background:#e8f5ee;color:#1a6e3c;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:bold">Answered</span>'
+        : '<span style="background:#f0efeb;color:#a0a09a;padding:2px 8px;border-radius:12px;font-size:10px">Pending</span>';
+      return `<tr style="border-bottom:1px solid #f0efeb"><td style="padding:6px 8px;color:#5c5c58">${sq.name}</td><td style="padding:6px 8px">${cn.t}</td><td style="padding:6px 8px">${status}</td></tr>`;
+    })).join('')}</tbody>
+  </table>`;
+  id5.innerHTML = summaryHTML;
+  addSection('5 — Summary', id5);
+
+  // ── Inject and render
+  const container = document.createElement('div');
+  container.style.cssText = 'position:absolute;left:-9999px;top:0;width:800px';
+  container.appendChild(wrapper);
+  document.body.appendChild(container);
+
+  if (typeof html2pdf === 'undefined') {
+    // Fallback to print if library not loaded
+    document.body.removeChild(container);
+    window.print();
+    if (btn) btn.disabled = false;
+    if (lbl) lbl.textContent = 'Export PDF';
+    return;
+  }
+
+  html2pdf().set({
+    margin: [12, 10, 12, 10],
+    filename,
+    image: { type: 'jpeg', quality: 0.95 },
+    html2canvas: { scale: 2, useCORS: true, logging: false },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    pagebreak: { mode: ['css','legacy'] }
+  }).from(wrapper).save().then(() => {
+    document.body.removeChild(container);
+    if (btn) btn.disabled = false;
+    if (lbl) lbl.textContent = 'Export PDF';
+  }).catch(() => {
+    document.body.removeChild(container);
+    if (btn) btn.disabled = false;
+    if (lbl) lbl.textContent = 'Export PDF';
+  });
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+renderRisks();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</body>
+</html>
